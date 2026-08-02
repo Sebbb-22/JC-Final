@@ -1,0 +1,207 @@
+{
+  "info": {
+    "name": "Grupos de Amistad API",
+    "description": "Coleccion de pruebas para la API del sistema de Grupos de Amistad.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.token) pm.collectionVariables.set('token', data.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login lider",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.token) pm.collectionVariables.set('token', data.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"jperez\",\n  \"password\": \"lider123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Grupos",
+      "item": [
+        {
+          "name": "Listar grupos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/grupos", "host": ["{{base_url}}"], "path": ["grupos"] }
+          }
+        },
+        {
+          "name": "Crear grupo (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Grupo Nuevo\",\n  \"id_lider\": 2,\n  \"dia_semana\": \"Martes\",\n  \"hora\": \"19:00\",\n  \"ubicacion\": \"Casa X\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/grupos", "host": ["{{base_url}}"], "path": ["grupos"] }
+          }
+        },
+        {
+          "name": "Miembros de un grupo",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/grupos/1/miembros", "host": ["{{base_url}}"], "path": ["grupos", "1", "miembros"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Miembros",
+      "item": [
+        {
+          "name": "Crear miembro (lider)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pedro Gomez\",\n  \"direccion\": \"Calle 10 #20\",\n  \"edad\": 30,\n  \"telefono\": \"4491112233\",\n  \"id_grupo\": 1\n}"
+            },
+            "url": { "raw": "{{base_url}}/miembros", "host": ["{{base_url}}"], "path": ["miembros"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Asistencias",
+      "item": [
+        {
+          "name": "Registrar asistencia",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_miembro\": 1,\n  \"id_grupo\": 1,\n  \"fecha\": \"2026-07-29\",\n  \"tipo\": \"grupo\",\n  \"asistio\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/asistencias", "host": ["{{base_url}}"], "path": ["asistencias"] }
+          }
+        },
+        {
+          "name": "Listar asistencias de un grupo",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/grupos/1/asistencias", "host": ["{{base_url}}"], "path": ["grupos", "1", "asistencias"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ofrendas",
+      "item": [
+        {
+          "name": "Registrar ofrenda",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_grupo\": 1,\n  \"fecha\": \"2026-07-29\",\n  \"monto\": 200.00\n}"
+            },
+            "url": { "raw": "{{base_url}}/ofrendas", "host": ["{{base_url}}"], "path": ["ofrendas"] }
+          }
+        },
+        {
+          "name": "Listar ofrendas de un grupo",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/grupos/1/ofrendas", "host": ["{{base_url}}"], "path": ["grupos", "1", "ofrendas"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reportes (admin)",
+      "item": [
+        {
+          "name": "Reporte semanal",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/reportes/semanal?inicio=2026-07-20&fin=2026-07-26",
+              "host": ["{{base_url}}"],
+              "path": ["reportes", "semanal"],
+              "query": [
+                { "key": "inicio", "value": "2026-07-20" },
+                { "key": "fin", "value": "2026-07-26" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Grupos con asistencia baja",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/reportes/asistencia-baja", "host": ["{{base_url}}"], "path": ["reportes", "asistencia-baja"] }
+          }
+        }
+      ]
+    }
+  ]
+}
