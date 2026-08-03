@@ -38,7 +38,7 @@ Cada carpeta tiene su propio README con más detalle:
 
 ### 0. Requisitos previos
 
-Instala esto antes de empezar:
+En caso de no tener lo siguiente insnstalado, estos son los pasos para instalarlo antes de empezar:
 
 - **Git** — https://git-scm.com/downloads
 - **Node.js** (versión 18 o superior, incluye `npm`) — https://nodejs.org
@@ -56,8 +56,8 @@ mysql --version
 ### 1. Descargar el proyecto
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
-cd grupos-amistad
+git clone https://github.com/Sebbb-22/JC-Final.git
+cd JC-Final
 ```
 
 ### 2. Crear la base de datos
