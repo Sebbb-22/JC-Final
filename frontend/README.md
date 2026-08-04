@@ -58,8 +58,11 @@ src/
 
 ## Capturas de pantalla
 
-_Agregar aquí las capturas de la interfaz en ejecución (login, panel admin, panel líder) antes de
-la entrega, en `frontend/capturas/`._
+| Pantalla | Archivo |
+|---|---|
+| Login | [`capturas/1-Login.png`](capturas/1-Login.png) |
+| Panel de administrador | [`capturas/2-PanelAdmin.png`](capturas/2-PanelAdmin.png) |
+| Panel de líder | [`capturas/3-PanelLider.png`](capturas/3-PanelLider.png) |
 
 ## Usuarios de prueba
 
