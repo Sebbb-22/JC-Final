@@ -4,6 +4,8 @@ Motor: **MySQL** (probado con MySQL 8/9).
 
 ## Diagrama del modelo
 
+![Diagrama entidad-relación](diagrama.png)
+
 ```
 usuarios (id, nombre, username, password, rol['admin'|'lider'])
    |

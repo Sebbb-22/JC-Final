@@ -8,6 +8,8 @@ export default function AdminDashboard() {
 
   const [grupos, setGrupos] = useState([]);
   const [nuevoGrupo, setNuevoGrupo] = useState({ nombre: '', id_lider: '', dia_semana: 'Lunes', hora: '19:00', ubicacion: '' });
+  const [editandoId, setEditandoId] = useState(null);
+  const [editForm, setEditForm] = useState({ nombre: '', dia_semana: 'Lunes', hora: '19:00', ubicacion: '' });
 
   const [inicio, setInicio] = useState('');
   const [fin, setFin] = useState('');
@@ -23,6 +25,23 @@ export default function AdminDashboard() {
     await api.crearGrupo(token, { ...nuevoGrupo, id_lider: Number(nuevoGrupo.id_lider) });
     setGrupos(await api.listarGrupos(token));
     setNuevoGrupo({ nombre: '', id_lider: '', dia_semana: 'Lunes', hora: '19:00', ubicacion: '' });
+  }
+
+  function iniciarEdicion(grupo) {
+    setEditandoId(grupo.id);
+    setEditForm({ nombre: grupo.nombre, dia_semana: grupo.dia_semana, hora: grupo.hora, ubicacion: grupo.ubicacion });
+  }
+
+  async function handleGuardarEdicion(id) {
+    await api.actualizarGrupo(token, id, editForm);
+    setGrupos(await api.listarGrupos(token));
+    setEditandoId(null);
+  }
+
+  async function handleEliminarGrupo(id) {
+    if (!window.confirm('¿Eliminar este grupo? Esta acción no se puede deshacer.')) return;
+    await api.eliminarGrupo(token, id);
+    setGrupos(await api.listarGrupos(token));
   }
 
   async function handleReporteSemanal(e) {
@@ -43,13 +62,52 @@ export default function AdminDashboard() {
 
       <section>
         <h2>Grupos</h2>
-        <ul>
-          {grupos.map((g) => (
-            <li key={g.id}>
-              {g.nombre} — Líder: {g.lider?.nombre} — {g.dia_semana} {g.hora} — {g.ubicacion}
-            </li>
-          ))}
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th><th>Líder</th><th>Día</th><th>Hora</th><th>Ubicación</th><th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {grupos.map((g) => (
+              editandoId === g.id ? (
+                <tr key={g.id} className="edit-row">
+                  <td><input value={editForm.nombre}
+                    onChange={(e) => setEditForm({ ...editForm, nombre: e.target.value })} /></td>
+                  <td>{g.lider?.nombre}</td>
+                  <td>
+                    <select value={editForm.dia_semana}
+                      onChange={(e) => setEditForm({ ...editForm, dia_semana: e.target.value })}>
+                      {['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'].map((d) => (
+                        <option key={d} value={d}>{d}</option>
+                      ))}
+                    </select>
+                  </td>
+                  <td><input type="time" value={editForm.hora}
+                    onChange={(e) => setEditForm({ ...editForm, hora: e.target.value })} /></td>
+                  <td><input value={editForm.ubicacion}
+                    onChange={(e) => setEditForm({ ...editForm, ubicacion: e.target.value })} /></td>
+                  <td className="actions">
+                    <button className="btn-sm" onClick={() => handleGuardarEdicion(g.id)}>Guardar</button>
+                    <button className="btn-sm btn-secondary" onClick={() => setEditandoId(null)}>Cancelar</button>
+                  </td>
+                </tr>
+              ) : (
+                <tr key={g.id}>
+                  <td>{g.nombre}</td>
+                  <td>{g.lider?.nombre}</td>
+                  <td>{g.dia_semana}</td>
+                  <td>{g.hora}</td>
+                  <td>{g.ubicacion}</td>
+                  <td className="actions">
+                    <button className="btn-sm btn-secondary" onClick={() => iniciarEdicion(g)}>Editar</button>
+                    <button className="btn-sm btn-danger" onClick={() => handleEliminarGrupo(g.id)}>Eliminar</button>
+                  </td>
+                </tr>
+              )
+            ))}
+          </tbody>
+        </table>
 
         <form onSubmit={handleCrearGrupo} className="inline-form">
           <h3>Nuevo grupo</h3>
